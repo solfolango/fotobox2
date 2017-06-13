@@ -1,0 +1,45 @@
+{
+  "name": "fotobox2",
+  "version": "1.0.0",
+  "description": "Raspberry Pi Fotobox software",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean:jpg": "del-cli images/**/*.jpg",
+    "clean:png": "del-cli images/**/*.png",
+    "clean:logs": "del-cli ./**/*.log",
+    "clean:all" : "npm run clean:logs && npm run clean:jpg && npm run clean:png",
+    "dev": "npm run clean:logs && npm run clean:jpg && npm run clean:png && set NODE_ENV=dev&& node index",
+    "dev-noclean": "set NODE_ENV=dev&& node index",
+    "prod": "npm run clean:logs && npm run clean:jpg && npm run clean:png && export NODE_ENV=prod&&node index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/solfolango/fotobox2.git"
+  },
+  "author": "Sebastian Will (sebastian.h.will@gmail.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/solfolango/fotobox2/issues"
+  },
+  "homepage": "https://github.com/solfolango/fotobox2#readme",
+  "dependencies": {
+    "events": "^1.1.1",
+    "express": "^4.15.3",
+    "fs": "0.0.1-security",
+    "lodash": "^4.17.4",
+    "machina": "^2.0.0",
+    "memwatch-next": "^0.3.0",
+    "moment": "^2.18.1",
+    "path": "^0.12.7",
+    "probe-image-size": "^3.1.0",
+    "sharp": "^0.18.1",
+    "socket.io": "^2.0.3",
+    "socket.io-client": "^2.0.3",
+    "winston": "^2.3.1",
+    "xml2js": "^0.4.17"
+  },
+  "devDependencies": {
+    "del-cli": "^1.0.0"
+  }
+}
