@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean:jpg": "del-cli images/**/*.jpg",
-    "clean:png": "del-cli images/**/*.png",
+    "clean:jpg": "del-cli server/_ressources/pictures/**/*.jpg",
+    "clean:png": "del-cli server/_ressources/pictures/**/*.png",
     "clean:logs": "del-cli ./**/*.log",
     "clean:all" : "npm run clean:logs && npm run clean:jpg && npm run clean:png",
     "dev": "npm run clean:logs && npm run clean:jpg && npm run clean:png && set NODE_ENV=dev&& node index",

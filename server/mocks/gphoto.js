@@ -33,7 +33,7 @@ class GPhoto extends EventEmitter {
                 });
 
 
-                readStream.pipe(fs.createWriteStream( target));
+                readStream.pipe(fs.createWriteStream(target));
             }.bind(this));
         }.bind(this));
         

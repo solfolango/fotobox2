@@ -22,7 +22,6 @@ class DesignManager {
         for (var i = 0; i < files.length; i++) {
             console.log(files[i]);
             if (files[i].toLowerCase().endsWith('.svg')) {
-                console.log("Add design");
                 this.addDesign(files[i]);
             }
         }
@@ -56,7 +55,7 @@ class DesignManager {
 
                 var basename = path.posix.basename(filename, '.svg');
 
-                var definition = {
+                var design = {
                     name: basename,
                     document: {
                         width: viewBox[2],
@@ -79,8 +78,7 @@ class DesignManager {
 
                 // get all areas
                 doc.svg.rect.forEach(function(rect, index) {
-                    console.log(rect);
-                    definition.areas.push(
+                    design.areas.push(
                         {
                             shape: 'rect',
                             x: convert(rect['$'].x),
@@ -94,13 +92,10 @@ class DesignManager {
                     );
                 });
 
-                // sort
-                definition.areas = _.sortBy(definition.areas, ['y', 'x']);
+                // sort the areas by y, then x coords
+                design.areas = _.sortBy(design.areas, ['y', 'x']);
 
-                this.designs.push(definition);
-
-                console.log(definition);
-
+                this.designs.push(design);
             }.bind(this));
         } catch (exception) {
             logger.error(exception);

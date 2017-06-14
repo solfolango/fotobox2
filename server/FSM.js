@@ -61,8 +61,21 @@ var fsm = new machina.Fsm( {
 
         ready: {
 
-            _onEnter: function() {
-                this.handle('instructions');
+            _onEnter: function(fileinfo = null) {
+                this.handle('slideshow', fileinfo);
+            },
+
+            slideshow: function(fileinfo = null) {
+                if (fileinfo !== null) {
+                    this.emit(config.event.client.showSlideshow, {arg: {url: fileinfo.url }});
+                } else {
+                    this.emit(config.event.client.showSlideshow);
+                }
+
+                // switch to instructions after config.client.module.slideshow.duration
+                this.timer = setTimeout(function() {
+                    this.handle('instructions');
+                }.bind(this), config.client.slideshow.showDuration * 1000);
             },
 
             instructions: function() {
@@ -72,15 +85,6 @@ var fsm = new machina.Fsm( {
                 this.timer = setTimeout(function() {
                     this.handle('slideshow');
                 }.bind(this), config.client.instructions.showDuration * 1000);
-            },
-
-            slideshow: function() {
-                this.emit(config.event.client.showSlideshow);
-
-                // switch to instructions after config.client.module.slideshow.duration
-                this.timer = setTimeout(function() {
-                    this.handle('instructions');
-                }.bind(this), config.client.slideshow.showDuration * 1000);
             },
 
             buzzer: function() {
@@ -106,13 +110,25 @@ var fsm = new machina.Fsm( {
                 this.handle('initCapture');
             },
 
-            initCapture: function() {
+            // Sends the design to the client, awaits the countdown and then handles 'capture'
+            // repeat (bool): There was an error with the last capture, so we need to repeat that one
+            initCapture: function(repeat = false) {
 
+                // init client args 
+                var args = {
+                    design: this.design,
+                    repeat: repeat           // per default we do not repeat
+                };
+
+                // set the index of the picture to capture
                 if (this.index === null) {
                     this.index = 0;
                 } else {
-                    this.index++;
+                    if (repeat === false) {
+                        this.index++;
+                    }
                 }
+                args.index = this.index;
 
                 // we are done, send the signal to the server to compose everything
                 if (this.index >= this.design.areas.length) {
@@ -120,7 +136,7 @@ var fsm = new machina.Fsm( {
                 }
 
                 // build the args passed to the client
-                this.sendClient(config.event.client.initCapture, {index: this.index, design: this.design});
+                this.sendClient(config.event.client.initCapture, args);
 
                 // waiting for the client signal, for prod this is done in socket.on within the initialize function of the FSM
                 if (process.env.NODE_ENV === 'dev') {
@@ -132,8 +148,13 @@ var fsm = new machina.Fsm( {
 
             capture: function() {
                 // send the server the signal to trigger the camera
-                this.emit(config.event.camera.doCapture);
-                this.deferUntilTransition();
+                var args = {
+                    design: this.design,
+                    index: this.index
+                };
+                console.log("Sending capture event to server");
+                this.emit(config.event.camera.doCapture, args);
+                
             },
 
             endSession: function() {
@@ -141,8 +162,10 @@ var fsm = new machina.Fsm( {
             },
 
             _onExit: function() {
+                // cleaning up
                 clearTimeout(this.timer);
                 this.design = null;
+                this.index = null;
             }
         }
     },

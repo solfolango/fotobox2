@@ -21,6 +21,12 @@ var config = {
                 overlay: 'overlay',
                 background: 'background'
             }
+        },
+        composer: {
+            default: {
+                background: 0xffffffff, //white
+                format: 'png'
+            }
         }
     },
     event: {
