@@ -74,11 +74,15 @@ fsm.on('transition', function(event) {
     }
 });
 
+<<<<<<< HEAD
 io.on('connection', function(socket) {
     fsm.setSocket(socket);
     fsm.start();
 });
 
+=======
+fsm.start();
+>>>>>>> 3cf7793bcf519a66997ade6f1c8a9879cc2d1a98
 
 buzzer.on(config.event.buzzer.stopPress, function(duration) {
 
@@ -88,7 +92,11 @@ buzzer.on(config.event.buzzer.stopPress, function(duration) {
 
     if (fsm.isReadyForCapture()) {
         console.log("FSM is ready for capture: " + duration);
+<<<<<<< HEAD
         fsm.transition('capture', design);
+=======
+        fsm.transition('capture');
+>>>>>>> 3cf7793bcf519a66997ade6f1c8a9879cc2d1a98
     } else {
         console.log("FSM is not ready for capture");
     }
