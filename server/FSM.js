@@ -142,7 +142,10 @@ var fsm = new machina.Fsm( {
 
             _onExit: function() {
                 clearTimeout(this.timer);
+<<<<<<< HEAD
                 this.design = null;
+=======
+>>>>>>> 3cf7793bcf519a66997ade6f1c8a9879cc2d1a98
             }
         }
     },
